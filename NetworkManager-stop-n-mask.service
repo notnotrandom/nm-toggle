@@ -1,0 +1,11 @@
+[Unit]
+Description=Stop and mask NM
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStop=/usr/bin/sudo /usr/local/bin/nm-toggle off
+
+[Install]
+WantedBy=multi-user.target
+
