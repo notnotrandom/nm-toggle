@@ -17,7 +17,7 @@ Needed packages:
 
 Then there is **a C program**, which takes two arguments `on|off`, the latter being the default (if an invalid argument is provided). For `off`, it disables wired and wireless interfaces, stops `NetworkManager`, **and then masks its service files**. This is to prevent it going up in the next reboot. For `on`, it does the opposite: unmask, start `NetworkManager`, and enable wired interfaces. *Wireless* interfaces still have to be manually brought up (usually through `network-manager-applet`).
 
-The executable should be stored in `/usr/local/bin`, which should only be writable be `root`, and it only takes two short arguments -- so I allow it to run with password-less `sudo` privileges. If a remote attacker gains non-root access to my machine, this program only buys him the possibility of closing the network, which doesn't really help his case... (if he gains *root* access, I am toast anyway, `sudo` privileges or not).
+The executable should be stored in `/usr/local/bin`, which usually is only writable be `root`, and it only takes two short arguments -- so I allow it to run with password-less `sudo` privileges. If a remote attacker gains non-root access to my machine, this program only buys him the possibility of closing the network, which doesn't really help his case... (if he gains *root* access, I am toast anyway, `sudo` privileges or not).
 
 Then there are **two `.bashrc` alias**, for convenience (see below), and a `systemd` service file to ensure `NetworkManager` will not be automagically brought up in the next reboot.
 
@@ -39,6 +39,8 @@ If your default editor is `vi(m)`, save and exit by hitting `<Esc>:wq<Enter>`. N
 alias online="sudo /usr/local/bin/nm-toggle on"
 alias offline="sudo /usr/local/bin/nm-toggle off"
 ~~~
+
+Remember to source `.bashrc` before using it.
 
 4. To avoid `NetworkManager` automagically starting up on the next reboot, put the `NetworkManager-stop-n-mask.service` file in `/usr/lib/systemd/system`, and then do:
 
