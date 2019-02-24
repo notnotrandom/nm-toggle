@@ -8,6 +8,9 @@
 #include <string.h>
 #include <stdbool.h>
 
+// for nanosleep
+#include <time.h>
+
 // for fork & wait
 #include <sys/types.h>
 #include <unistd.h>
@@ -43,6 +46,11 @@
 #define PING_GOOGLE "ping -c 2 www.google.com"
 
 static char* env[] = {"PATH="PATH"\0", (char*) 0};
+
+// Struct for nanosleep:
+// sleep_length.tv_sec = 0; // seconds
+// sleep_length.tv_nsec = 10 * 1000000; // 10 miliseconds
+static struct timespec sleep_length = { 0, 10 * 1000000 };
 
 // E.g. systemctl -> /sbin/systemctl
 void get_full_path(const char* executable_name, char* path)
@@ -165,8 +173,8 @@ void go_online()
 
   few(NM_START, false);
   while (few(NM_CHECK_IS_RUNNING, true) != 0) { // While NetworkManager is NOT running...
-    printf("NetworkManager still not up, trying again after 1 sec...");
-    sleep(1);
+    printf("NetworkManager still not up, trying again after 10 millisec...");
+    nanosleep(&sleep_length, NULL);
 
     // Note that if when control reaches here, NetworkManager has already started, re-issuing the start command again does no harm.
     few(NM_START, false);
@@ -186,13 +194,13 @@ void go_offline()
   if (few(NM_CHECK_IS_RUNNING, true) == 0) { // NetworkManager is running, so start by disabling interfaces...
     few(NM_DISABLE_WIRELESS, false);
     few(NM_DISABLE_NETWORKING, false);
-    sleep(1);
+    nanosleep(&sleep_length, NULL);
 
     // ... and then disable NetworkManager.
     few(NM_STOP, false);
     while (few(NM_CHECK_IS_RUNNING, true) == 0) { // If NetworkManager is still running...
       printf("NetworkManager still up, trying again to shutdown after 1 sec...");
-      sleep(1);
+      nanosleep(&sleep_length, NULL);
 
       // Note that if when control reaches here, NetworkManager has already stopped, re-issuing the stop command again does no harm.
       few(NM_STOP, false);
@@ -208,16 +216,16 @@ void go_offline()
     if (check_machine_is_offline() == false) { // Machine is online!
       do {
         go_online();
-        sleep(1);
+        nanosleep(&sleep_length, NULL);
 
         few(NM_DISABLE_WIRELESS, false);
         few(NM_DISABLE_NETWORKING, false);
-        sleep(1);
+        nanosleep(&sleep_length, NULL);
 
         few(NM_STOP, false);
         while (few(NM_CHECK_IS_RUNNING, true) == 0) { // If NetworkManager is STILL running...
           printf("NetworkManager STILL up, trying again to shutdown after 1 sec...");
-          sleep(1);
+          nanosleep(&sleep_length, NULL);
 
           // Note that if when control reaches here, NetworkManager has already stopped, re-issuing the stop command again does no harm.
           few(NM_STOP, false);
