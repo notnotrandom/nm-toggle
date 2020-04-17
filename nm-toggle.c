@@ -37,7 +37,7 @@
 #define NM_UNMASK1 "systemctl unmask NetworkManager-dispatcher.service"
 #define NM_UNMASK2 "systemctl unmask NetworkManager.service"
 #define NM_START   "systemctl start  NetworkManager.service"
-#define NM_ENABLE_NETWORKING  "nmcli networking on"
+#define NM_ENABLE_NETWORKING "nmcli networking on"
 #define NM_ENABLE_WIRELESS   "nmcli radio wifi on"
 
 // Check if NetworkManager is running.
