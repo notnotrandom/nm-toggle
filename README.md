@@ -44,9 +44,9 @@ alias online="sudo /usr/local/bin/nm-toggle on"
 alias offline="sudo /usr/local/bin/nm-toggle off"
 ~~~
 
-Remember to source `.bashrc` before using it.
+Remember to source `~/.bashrc` before using it.
 
-5. To avoid `NetworkManager` automagically starting up on the next reboot, put the `NetworkManager-stop-n-mask.service` file in `/usr/lib/systemd/system`, and then do:
+5. To avoid `NetworkManager` automagically starting up on the next reboot, put the `NetworkManager-stop-n-mask.service` file in `/usr/lib/systemd/system` (your wherever your distro stores user unit files), and then **enable** that service (which basically means it will always run at boot time):
 
 ~~~ {.text .numberLines}
 systemctl enable NetworkManager-stop-n-mask.service
