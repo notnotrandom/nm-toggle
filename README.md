@@ -1,3 +1,3 @@
 # Toggle your NetworkManager
 
-See <https://randomwalk.eu/pages/software/nm-toggle>.
+See <https://randomwalk.eu/software/nm-toggle>.
